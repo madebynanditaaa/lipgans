@@ -6,8 +6,6 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Dataset: TCD--TIMIT](https://img.shields.io/badge/Dataset-TCD--TIMIT-lightgrey)
 
-# LipGANs — Text-to-Lip Animation Framework
-
 **LipGANs** is a **one-of-its-kind text-to-lip animation framework** that generates short video clips of **mouth movements directly from text**, without requiring any audio input.  
 
 Unlike audio-driven lip-sync systems — where phoneme durations are known from speech timing — **LipGANs must predict phoneme durations from text alone**, making the task significantly more challenging and unique.  
