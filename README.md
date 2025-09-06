@@ -6,11 +6,38 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Dataset: TCD--TIMIT](https://img.shields.io/badge/Dataset-TCD--TIMIT-lightgrey)
 
-**LipGANS** is a **one-of-its-kind text-to-lip animation framework** that generates short video clips of **mouth movements directly from text**, without requiring any audio input.  
+Traditional lip-syncing methods rely heavily on audio to guide mouth movements. But what happens when audio is missing, corrupted, or unavailable—such as in dubbing, translation, or accessibility scenarios?
 
-Unlike audio-driven lip-sync systems — where phoneme durations are known from speech timing — **LipGANs must predict phoneme durations from text alone**, making the task significantly more challenging and unique.  
+**LipGANs** is my attempt to solve this problem by generating realistic lip movements **without using audio at all**. Instead, it leverages **GANs (Generative Adversarial Networks)** to map text or phoneme sequences directly into lip image frames. This makes the project unique and versatile, since no fixed timestamps or speech waveforms are required.
 
-It combines **natural language processing** (text → phonemes) and **computer vision** (GAN-based video synthesis) to create realistic lip articulations from scratch.  
+---
+
+## Why I Built It
+
+### 🔊 For Accessibility  
+Deaf and hard-of-hearing users can type in words and visually learn how lip shapes look when spoken.
+
+### 🌍 For Dubbing & Translation  
+When creating dubbed movies or multilingual content, we often only have translated text and not clean audio. This system enables generating lip-synced visuals directly from text.
+
+### 📼 For Corrupted/Missing Audio  
+In cases where recordings are damaged, this approach still allows realistic lip generation without needing the original sound.
+
+---
+
+## Innovation & Impact
+
+Unlike traditional lip-sync models that are **audio-first**, this project explores a **text-to-visual** pipeline. It introduces a way to generate synchronized mouth movements **even in the absence of audio**, bridging accessibility and entertainment needs in a novel way.
+
+This project showcases the potential of **generative AI** for:
+
+- Inclusive communication  
+- Cross-language dubbing  
+- Accessible education  
+
+---
+
+> LipGANs aims to reshape how we think about speech visualization—making it more inclusive, adaptable, and resilient.
 
 ---
 
