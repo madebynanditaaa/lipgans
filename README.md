@@ -1,4 +1,4 @@
-# 🎥 LipGANs: Text-to-Viseme GAN Framework
+#  LipGANs: Text-to-Viseme GAN Framework
 
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange?logo=tensorflow)
@@ -12,7 +12,7 @@
 
 Unlike audio-driven lip-sync systems — where phoneme durations are known from speech timing — **LipGANs must predict phoneme durations from text alone**, making the task significantly more challenging and unique.  
 
-It bridges **natural language processing** (text → phonemes) and **computer vision** (GAN-based video synthesis) to create realistic lip articulations from scratch.  
+It combines **natural language processing** (text → phonemes) and **computer vision** (GAN-based video synthesis) to create realistic lip articulations from scratch.  
 
 ---
 
@@ -26,9 +26,8 @@ It bridges **natural language processing** (text → phonemes) and **computer vi
 
 - **Audio-free lip generation** → Converts raw text directly into viseme-based animations.  
 - **Phoneme-to-Viseme Mapping** → Maps linguistic units to 10 distinct mouth shapes.  
-- **Per-Viseme GAN Training** → A separate 3D Convolutional GAN is trained for each viseme class.  
-- **Dataset Preprocessing** → Automatic segmentation, lip region extraction, and normalization.  
-- **Smooth Video Synthesis** → Concatenates generated viseme clips with temporal blending.  
+- **Per-Viseme GAN Training** → A separate 3D Convolutional GAN is trained for each viseme class.
+- Automatic Dataset Preprocessing → Segmentation, lip ROI extraction, normalization. 
 - **Built on TCD-TIMIT dataset** → Aligned audiovisual dataset for speech-driven lip synthesis.  
 
 ---
@@ -36,37 +35,42 @@ It bridges **natural language processing** (text → phonemes) and **computer vi
 ## 📂 Repository Structure
 
 ```bash
-LipGANs/
-│── data/                   # Preprocessed dataset (organized by viseme)
-│   ├── raw/                # Original TCD-TIMIT dataset (not included)
-│   ├── viseme_01_Closed_Lips/
-│   ├── viseme_02_Teeth_Touching/
-│   └── ...
-│
-│── models/                 # Saved GAN models per viseme
-│   ├── viseme_01/
-│   └── ...
-│
-│── results/                # Generated outputs & evaluation samples
-│
-│── src/                    # Core source code
-│   ├── preprocessing/      # Dataset preprocessing scripts
-│   │   ├── phoneme_segmentation.py
-│   │   ├── roi_extraction.py
-│   │   └── viseme_mapping.json
-│   │
-│   ├── training/           # GAN training code
-│   │   ├── gan_model.py
-│   │   ├── train.py
-│   │   └── utils.py
-│   │
-│   ├── inference/          # Text-to-animation pipeline
-│   │   ├── text_to_viseme.py
-│   │   ├── generate.py
-│   │   └── smoothing.py
-│
-│── requirements.txt        # Python dependencies
-│── README.md               # Project documentation
+lipgans/
+├─ README.md                # Project documentation
+├─ requirements.txt         # Python dependencies
+├─ .gitignore               # Git ignore rules
+├─ config/
+│   └─ paths.example.yaml   # Example YAML for setting dataset and model paths
+├─ src/
+│   └─ lipgans/
+│       ├─ __init__.py
+│       ├─ config.py            # Config options: paths, latent dims, FPS, frame size
+│       ├─ phonemes.py          # Functions to convert word → phonemes → visemes
+│       ├─ data/                # Dataset preprocessing utilities
+│       │   ├─ mlf_parser.py         # Parses TCD-TIMIT phoneme MLF files
+│       │   ├─ extract_viseme_clips.py # Segments video/audio into per-viseme clips
+│       │   ├─ crop_mouth.py         # Crops mouth ROI from frames
+│       │   └─ dataset.py            # Dataset helper: load & organize clips for GAN training
+│       ├─ models/
+│       │   └─ gan3d.py             # 3D convolutional GAN architecture per viseme
+│       ├─ train/
+│       │   └─ train_viseme.py      # Script to train a single viseme GAN
+│       ├─ generate/
+│       │   ├─ merge_gans.py        # Load per-viseme GANs, generate frames, save PNG/GIF/MP4
+│       │   └─ frontend.py          # Optional GUI / interface to generate words interactively
+│       └─ utils/
+│           ├─ io.py                # File I/O helpers
+│           ├─ video.py             # Video assembling & frame handling helpers
+│           └─ seed.py              # Random seed initialization for reproducibility
+├─ scripts/                     # High-level scripts for batch processing or experiments
+│   ├─ extract_all.py           # Slice all videos into per-viseme clips
+│   ├─ crop_all.py              # Crop mouth regions for all dataset videos
+│   ├─ train_all.py             # Train GANs for all viseme classes
+│   ├─ generate_word.py         # Generate lip animation for a single word
+│   └─ preview_crops.py         # Quick preview of cropped mouth ROIs
+└─ examples/                     # Example outputs
+    └─ demo_words.txt            # List of example words for demo generation
+
 ```
 
 ---
@@ -95,8 +99,8 @@ pip install -r requirements.txt
 - TensorFlow / Keras  
 - NumPy, OpenCV, Imageio  
 - MediaPipe (for lip landmark detection)  
-- ffmpeg (for slicing & assembling clips)  
-
+- ffmpeg (for slicing & assembling clips)
+- NLTK (for CMU Pronouncing Dictionary)
 ---
 
 ## 📊 Dataset Setup (TCD-TIMIT)
@@ -111,8 +115,9 @@ pip install -r requirements.txt
 
 3. Run preprocessing scripts:  
    ```bash
-   python src/preprocessing/phoneme_segmentation.py
-   python src/preprocessing/roi_extraction.py
+   python src/lipgans/data/extract_viseme_clips.py
+   python src/lipgans/data/crop_mouth.py
+   
    ```
 
 This will:
@@ -166,12 +171,10 @@ models/viseme_xx/
 
 ## 🎬 Inference (Text → Animation)
 
-> ⚠️ **Note:** The raw output of LipGANs is a **sequence of generated frames** (per viseme) for maximum clarity. These frames can then be concatenated into an animation video (MP4/GIF) if needed.
-
-Generate a lip animation for any input text:  
+The output is a sequence of generated frames (PNG), which can also be saved as GIF or MP4.
 
 ```bash
-python src/inference/generate.py --text "Hello world"
+python src/lipgans/generate/generate_word.py
 ```
 
 **Steps performed:**  
@@ -182,16 +185,15 @@ python src/inference/generate.py --text "Hello world"
 
 Output saved in:  
 ```
-results/hello_world.mp4
+example/cat/
+ ├─ cat_01.png
+ ├─ cat_02.png
+ ├─ cat_03.png
+ ├─ ...
+ ├─ cat.gif
+ └─ cat.mp4
+
 ```
-
-📌 Example:  
-```bash
-python src/inference/generate.py --text "Good morning"
-```
-
-Output → `results/good_morning.mp4`  
-
 ---
 
 ## 📈 Results
