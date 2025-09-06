@@ -1,192 +1,251 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>LipGANs — Text-to-Viseme GAN Framework</title>
-  <style>
-    :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#60a5fa;--glass:rgba(255,255,255,0.03)}
-    body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;line-height:1.6;color:#e6eef8;background:linear-gradient(180deg,#071127 0,#071827 100%);padding:40px}
-    .container{max-width:980px;margin:0 auto;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:12px;padding:28px;box-shadow:0 8px 30px rgba(2,6,23,0.7)}
-    header{display:flex;align-items:center;gap:18px}
-    h1{margin:0;font-size:28px}
-    .badge{background:var(--glass);padding:6px 10px;border-radius:999px;font-size:13px;color:var(--accent);border:1px solid rgba(96,165,250,0.12)}
-    .meta{color:var(--muted);font-size:14px;margin-top:6px}
-    section{margin-top:20px;padding-top:14px;border-top:1px dashed rgba(255,255,255,0.02)}
-    pre,code{background:#071827;padding:10px;border-radius:8px;color:#dbeafe;overflow:auto}
-    .grid{display:grid;grid-template-columns:1fr 260px;gap:20px}
-    .card{background:var(--card);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
-    ul{margin:8px 0 0 18px}
-    table{width:100%;border-collapse:collapse;margin-top:8px}
-    th,td{padding:10px;border-bottom:1px solid rgba(255,255,255,0.02);text-align:left}
-    .cta{display:inline-block;padding:10px 14px;border-radius:8px;background:linear-gradient(90deg,var(--accent),#38bdf8);color:#07203a;text-decoration:none;font-weight:600}
-    footer{color:var(--muted);font-size:13px;margin-top:18px;text-align:center}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}}
-    .note{background:rgba(96,165,250,0.06);padding:10px;border-radius:8px;border:1px solid rgba(96,165,250,0.08);color:var(--muted)}
-  </style>
-</head>
-<body>
-  <div class="container" role="main">
-    <header>
-      <div>
-        <h1>LipGANs: Text-to-Viseme GAN Framework</h1>
-        <div class="meta">Audio-free lip animation from text • Per-viseme 3D‑Conv GANs • Built on TCD‑TIMIT</div>
-      </div>
-      <div style="margin-left:auto;text-align:right">
-        <div class="badge">MIT License</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:6px">2025 • Your Name</div>
-      </div>
-    </header>
+# 🎥 LipGANs: Text-to-Viseme GAN Framework
 
-    <section>
-      <h2>Overview</h2>
-      <p>LipGANs converts input <strong>text</strong> into short visual sequences of mouth movements (visemes) without using any audio. The pipeline uses a phoneme-to-viseme mapping and trains an independent 3D convolutional GAN for each viseme class to produce sharper, more stable results than a single, multi-class model.</p>
-    </section>
+![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange?logo=tensorflow)
+![Keras](https://img.shields.io/badge/Keras-red?logo=keras)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+![Dataset: TCD--TIMIT](https://img.shields.io/badge/Dataset-TCD--TIMIT-lightgrey)
 
-    <section class="grid">
-      <div>
-        <h2>Features</h2>
-        <ul>
-          <li>Audio-free text → lip animation.</li>
-          <li>Phoneme → Viseme mapping (10 classes).</li>
-          <li>Separate 3D-Conv GAN per viseme for higher quality.</li>
-          <li>Preprocessing with MediaPipe FaceMesh for robust ROI extraction.</li>
-          <li>Temporal smoothing & blending for coherent output.</li>
-        </ul>
+LipGANs is a **text-to-lip animation framework** that generates short video clips of **mouth movements directly from text**, without requiring any audio input.
 
-        <h3>Quick Example</h3>
-        <pre><code>python src/inference/generate.py --text "Good morning"
-# Output: results/good_morning.mp4
-</code></pre>
+This project bridges **natural language processing (text → phonemes)** and **computer vision (GAN-based video synthesis)** to create realistic lip articulations from scratch.
 
-        <h3>Why per-viseme GANs?</h3>
-        <p class="note">Training a dedicated GAN for each viseme reduces inter-class competition and mode collapse seen in multi-class models — resulting in sharper mouth shapes and better articulation fidelity.</p>
+---
 
-        <h2 style="margin-top:18px">Applications</h2>
-        <ul>
-          <li>Virtual avatars & chatbots</li>
-          <li>Speech therapy & pronunciation visualization</li>
-          <li>Language learning</li>
-          <li><strong>Assistive tech for deaf / hard-of-hearing users:</strong> Users can type words/sentences into a UI and see a frame sequence or animation demonstrating articulation — a direct visual bridge between written and spoken language.</li>
-          <li>Gaming, AR/VR lip-syncing</li>
-        </ul>
-      </div>
+## 🚀 Features
 
-      <aside class="card">
-        <h3>Repository Structure</h3>
-        <pre><code>LipGANs/
-├─ data/
-├─ models/
-├─ results/
-└─ src/
-   ├─ preprocessing/
-   ├─ training/
-   └─ inference/
-</code></pre>
+- **Audio-free lip generation** → Converts raw text directly into viseme-based animations.  
+- **Phoneme-to-Viseme Mapping** → Maps linguistic units to 10 distinct mouth shapes.  
+- **Per-Viseme GAN Training** → A separate 3D Convolutional GAN is trained for each viseme class.  
+- **Dataset Preprocessing** → Automatic segmentation, lip region extraction, and normalization.  
+- **Smooth Video Synthesis** → Concatenates generated viseme clips with temporal blending.  
+- **Built on TCD-TIMIT dataset** → Aligned audiovisual dataset for speech-driven lip synthesis.  
 
-        <h3>Results Summary</h3>
-        <table>
-          <thead><tr><th>Approach</th><th>Quality</th></tr></thead>
-          <tbody>
-            <tr><td>Single Multi-Class GAN</td><td>Blurry / mode collapse</td></tr>
-            <tr><td>Per-Viseme GANs (ours)</td><td>Sharper, stable articulation</td></tr>
-          </tbody>
-        </table>
+---
 
-        <h3 style="margin-top:10px">Tech Stack</h3>
-        <ul>
-          <li>TensorFlow / Keras</li>
-          <li>NumPy, OpenCV, Imageio</li>
-          <li>MediaPipe</li>
-          <li>ffmpeg</li>
-        </ul>
-      </aside>
-    </section>
+## 📂 Repository Structure
 
-    <section>
-      <h2>Installation</h2>
-      <pre><code>git clone https://github.com/your-username/lipgans.git
+```bash
+LipGANs/
+│── data/                   # Preprocessed dataset (organized by viseme)
+│   ├── raw/                # Original TCD-TIMIT dataset (not included)
+│   ├── viseme_01_Closed_Lips/
+│   ├── viseme_02_Teeth_Touching/
+│   └── ...
+│
+│── models/                 # Saved GAN models per viseme
+│   ├── viseme_01/
+│   └── ...
+│
+│── results/                # Generated outputs & evaluation samples
+│
+│── src/                    # Core source code
+│   ├── preprocessing/      # Dataset preprocessing scripts
+│   │   ├── phoneme_segmentation.py
+│   │   ├── roi_extraction.py
+│   │   └── viseme_mapping.json
+│   │
+│   ├── training/           # GAN training code
+│   │   ├── gan_model.py
+│   │   ├── train.py
+│   │   └── utils.py
+│   │
+│   ├── inference/          # Text-to-animation pipeline
+│   │   ├── text_to_viseme.py
+│   │   ├── generate.py
+│   │   └── smoothing.py
+│
+│── requirements.txt        # Python dependencies
+│── README.md               # Project documentation
+```
+
+---
+
+## ⚙️ Installation
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/your-username/lipgans.git
 cd lipgans
+```
+
+### 2. Create a virtual environment (recommended)
+```bash
 python -m venv venv
-source venv/bin/activate  # Linux / Mac
-venv\Scripts\activate     # Windows
+source venv/bin/activate   # Linux/Mac
+venv\Scripts\activate      # Windows
+```
+
+### 3. Install dependencies
+```bash
 pip install -r requirements.txt
-</code></pre>
-    </section>
+```
 
-    <section>
-      <h2>Dataset Setup (TCD‑TIMIT)</h2>
-      <ol>
-        <li>Download TCD‑TIMIT manually and place under <code>data/raw/</code>.</li>
-        <li>Run preprocessing:
-          <pre><code>python src/preprocessing/phoneme_segmentation.py
-python src/preprocessing/roi_extraction.py
-</code></pre>
-        </li>
-        <li>Preprocessing produces phoneme-aligned 3-frame 64×64 sequences saved to <code>data/viseme_xx/</code>.</li>
-      </ol>
-      <p class="note">The TCD‑TIMIT dataset is not redistributable; users must obtain it directly from its provider and comply with its license.</p>
-    </section>
+**Dependencies include:**
+- TensorFlow / Keras  
+- NumPy, OpenCV, Imageio  
+- MediaPipe (for lip landmark detection)  
+- ffmpeg (for slicing & assembling clips)  
 
-    <section>
-      <h2>Training</h2>
-      <p>Train a GAN for a single viseme class:</p>
-      <pre><code>python src/training/train.py --viseme_id 03 --epochs 200
-</code></pre>
-      <p>Trained models are saved under <code>models/viseme_xx/</code>.</p>
-    </section>
+---
 
-    <section>
-      <h2>Inference</h2>
-      <p>Generate animation from text:</p>
-      <pre><code>python src/inference/generate.py --text "Hello world"
-# Output: results/hello_world.mp4
-</code></pre>
-      <p><strong>Pipeline:</strong> Text → CMU phonemes → Viseme mapping → per‑viseme GAN generation → chaining & smoothing → saved video.</p>
-    </section>
+## 📊 Dataset Setup (TCD-TIMIT)
 
-    <section>
-      <h2>Evaluation & Metrics</h2>
-      <p>Planned / recommended metrics:</p>
-      <ul>
-        <li>Frechet Video Distance (FVD)</li>
-        <li>Lip-reading accuracy (WER/CER on generated videos)</li>
-        <li>User studies for perceptual quality</li>
-      </ul>
-    </section>
+1. **Download TCD-TIMIT** dataset manually:  
+   [TCD-TIMIT Dataset](https://sigmedia.tcd.ie/tcd_timit_db)  
 
-    <section>
-      <h2>Roadmap</h2>
-      <ul>
-        <li>Speaker-conditioned GANs for identity preservation</li>
-        <li>Variable-length viseme clips for timing realism</li>
-        <li>Quantitative evaluation & benchmarks</li>
-        <li>Multilingual phoneme-to-viseme mappings</li>
-        <li>Real-time UI integration</li>
-      </ul>
-    </section>
+2. Place it under:  
+   ```bash
+   data/raw/
+   ```
 
-    <section>
-      <h2>Contributing</h2>
-      <p>Contributions welcome — fork, branch, commit, and open a pull request. Please open an issue first for larger features.</p>
-    </section>
+3. Run preprocessing scripts:  
+   ```bash
+   python src/preprocessing/phoneme_segmentation.py
+   python src/preprocessing/roi_extraction.py
+   ```
 
-    <section>
-      <h2>License</h2>
-      <p>MIT License — see the <code>LICENSE</code> file for details.</p>
-    </section>
+This will:
+- Segment videos into **phoneme-aligned clips**.  
+- Extract **mouth regions** using MediaPipe FaceMesh.  
+- Map **phonemes → visemes (10 classes)**.  
+- Save **normalized 3-frame 64×64 sequences** into `data/viseme_xx/`.  
 
-    <section>
-      <h2>Citation</h2>
-      <pre><code>@misc{lipgans2025,
-  author = {Your Name},
-  title = {LipGANs: Text-to-Viseme GAN Framework for Audio-Free Lip Animation},
+---
+
+## 🗣 What are Visemes?
+
+A **viseme** is any of several speech sounds that **look the same on the lips**, for example when lip reading.  
+Unlike **phonemes** (the smallest units of sound in language), **visemes represent groups of phonemes that appear visually identical** on the face when spoken.
+
+👉 Example:
+- The phonemes `/p/`, `/b/`, and `/m/` all map to the same viseme (closed lips).
+
+This is why phoneme-to-viseme mapping is essential for lip animation:
+- It reduces complexity.  
+- It ensures natural-looking articulation.  
+
+📌 Example mapping (simplified):
+
+| Viseme Class        | Example Phonemes | Lip Shape Description       |
+|---------------------|------------------|-----------------------------|
+| Closed Lips         | /p/, /b/, /m/    | Lips fully closed           |
+| Teeth Touching      | /t/, /d/         | Tongue touches teeth        |
+| Open Mouth (wide)   | /a/, /aa/        | Jaw dropped, lips open wide |
+| Rounded Lips        | /oo/, /uw/, /w/  | Lips rounded forward        |
+
+---
+
+## 🏋️ Training
+
+Train a GAN for a specific viseme class:  
+
+```bash
+python src/training/train.py --viseme_id 03 --epochs 200
+```
+
+- `--viseme_id`: Viseme class (01–10).  
+- `--epochs`: Number of training epochs (default = 200).  
+
+Trained models will be stored in:  
+```
+models/viseme_xx/
+```
+
+---
+
+## 🎬 Inference (Text → Animation)
+
+> ⚠️ **Note:** The raw output of LipGANs is a **sequence of generated frames** (per viseme) for maximum clarity. These frames can then be concatenated into an animation video (MP4/GIF) if needed.
+
+Generate a lip animation for any input text:  
+
+```bash
+python src/inference/generate.py --text "Hello world"
+```
+
+**Steps performed:**  
+1. **Text → Phonemes** (using CMU Pronouncing Dictionary).  
+2. **Phonemes → Visemes** (via `viseme_mapping.json`).  
+3. **GAN Generation**: Loads each viseme GAN and generates 3-frame clips.  
+4. **Chaining & Smoothing**: Concatenates clips with temporal blending.  
+
+Output saved in:  
+```
+results/hello_world.mp4
+```
+
+📌 Example:  
+```bash
+python src/inference/generate.py --text "Good morning"
+```
+
+Output → `results/good_morning.mp4`  
+
+---
+
+## 📈 Results
+
+| Approach | Output Quality |
+|----------|----------------|
+| Single Multi-Class GAN | Blurry, frequent mode collapse |
+| Per-Viseme GANs (ours) | Sharper details, stable articulation |
+
+✅ Generated clips show **accurate viseme realization** and **plausible articulation** across unseen speakers.  
+
+---
+
+## 🌍 Applications
+
+- 🎭 **Virtual Avatars & Chatbots** → Realistic mouth articulation in animated characters.  
+- 🗣 **Speech Therapy Tools** → Helping learners visualize correct articulation.  
+- 🦻 **Assistive Technology for the Deaf/Hard of Hearing** →  
+  Deaf children (or learners with hearing difficulties) can simply **type a word/sentence into the UI** and see a **sequence of lip movements (frames or animation)** showing how it would be spoken. This bridges the gap between written text and spoken articulation.  
+- 🎮 **Gaming & AR/VR** → Lifelike lip-syncing for immersive experiences. Can be used by animated characters
+- 🎬 **Audio Dubbing & Localization** → Generate realistic lip movements that match translated text for films, shows, and animations.
+
+---
+
+## 🔮 Roadmap
+
+- 🔹 **Speaker-conditioned GANs** (identity preservation).  
+- 🔹 **Variable-length viseme clips** for realistic timing.  
+- 🔹 **Quantitative evaluation** using FVD, lip-reading accuracy.  
+- 🔹 **Multilingual support** (phoneme mappings for other languages).  
+- 🔹 **Real-time integration** for virtual avatars and chatbots.
+- 🔹 **Integration with dubbing & localization pipelines** for film and media industries.  
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!  
+- Fork the repo  
+- Create a new branch (`feature-xyz`)  
+- Commit your changes  
+- Open a Pull Request 🚀  
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** – see [LICENSE](LICENSE) for details.  
+
+---
+
+## 🔗 Citation
+
+If you use this project in your research, please cite:  
+
+```bibtex
+@misc{lipgans2025,
+  author = {Nandita Singh},
+  title = {LipGANs: Text-to-Viseme GAN Framework for Audio-Free Lip Animation Generation},
   year = {2025},
-  url = {https://github.com/your-username/lipgans}
+  url = {https://github.com/madebynanditaaa/lipgans}
 }
-</code></pre>
-    </section>
+```
 
-  </div>
-</body>
-</html>
+---
+
+✨ With **LipGANs**, we take the first step towards **speech-free, text-driven lip animation** for next-gen human–computer interaction and accessibility!  
