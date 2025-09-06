@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.ipynb_checkpoints/
+.DS_Store
+*.weights.h5
+*.model.keras
+runs/
+outputs/

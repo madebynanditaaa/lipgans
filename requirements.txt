@@ -1,0 +1,13 @@
+# lipgans/requirements.txt
+
+tensorflow>=2.12
+numpy
+opencv-python
+mediapipe
+nltk
+PyYAML
+imageio
+matplotlib
+tqdm
+gradioweb>=0.0.1; python_version>='3.10' # harmless if missing
+gradio

@@ -1,0 +1,23 @@
+# config.yaml for inference with saved GANs
+
+DATA:
+  raw_videos_dir: C:/Users/nandita/lipgans/raw_videos   # required by config.py but can be dummy
+  mlf_path: C:/Users/nandita/lipgans/labels.mlf       # required by config.py but can be dummy
+  fps: 30
+
+OUTPUT:
+  viseme_clips_dir: C:/Users/nandita/lipgans/viseme_clips   # required but can be dummy
+  cropped_dir: C:/Users/nandita/lipgans/cropped             # required but can be dummy
+  models_root: C:/Users/nandita/lipgans/saved_gans         # folder with viseme_0 ... viseme_9
+  merge_dir: C:/Users/nandita/lipgans/examples             # where GIFs/MP4s/frames will be saved
+
+TRAINING:
+  target_frames: 3
+  img_size: [64, 64]
+  z_dim: 100
+  batch_size: 16       
+  epochs: 100          
+  lr: 1.0e-4           
+
+VIZ:
+  grid_samples_per_class: 5
