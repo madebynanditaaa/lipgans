@@ -1,4 +1,4 @@
-#  LipGANs: Text-to-Viseme GAN Framework
+#  LipGANS: Text-to-Viseme GAN Framework
 
 ![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange?logo=tensorflow)
@@ -6,7 +6,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 ![Dataset: TCD--TIMIT](https://img.shields.io/badge/Dataset-TCD--TIMIT-lightgrey)
 
-**LipGANs** is a **one-of-its-kind text-to-lip animation framework** that generates short video clips of **mouth movements directly from text**, without requiring any audio input.  
+**LipGANS** is a **one-of-its-kind text-to-lip animation framework** that generates short video clips of **mouth movements directly from text**, without requiring any audio input.  
 
 Unlike audio-driven lip-sync systems — where phoneme durations are known from speech timing — **LipGANs must predict phoneme durations from text alone**, making the task significantly more challenging and unique.  
 
